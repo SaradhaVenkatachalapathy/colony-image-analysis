@@ -7,7 +7,7 @@ For visualization of 3D spheroids, it is important to have 3D projections of the
   1. The program _"project_in3d.ijm"_ perfroms a 3D projection of all the images. 
   2. The program _"project_in3d.ijm"_ projects the images along the Z axis and makes a montage for each channel. 
   
-In order to then identify spheroids as 3D objects,we use _**"3d_objects_spheroid.ijm"**_. Here, the sheroids are identified using only the nuclear stain. After this step, a number of further analysis can be done. We have doen the following
+In order to then identify spheroids as 3D objects,we use _"3d_objects_spheroid.ijm"_. Here, the sheroids are identified using only the nuclear stain. After this step, a number of further analysis can be done. We have doen the following
   1. The program _"spheroid_zproject_2d_measure.ijm"_ quantifies the geometrical and intensity measures for a z-projected spheroid across channels 
   2. The program _"measures_spheroid.ijm"_ quantifies the 3D geometrical and intensity measures for spheroid across channels 
   3. The program _spheroid_shells.ijm"_ allows us to measure the radial distribution of intensities within a spheroid. It creates nesting shellsby eroding the spheroid by the same distance in X, Y and Z thereby enabiling the quantification quantify of intensity distribution in these shells.
