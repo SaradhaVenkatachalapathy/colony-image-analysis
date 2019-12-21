@@ -2,7 +2,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////  SCRIPT TO OOMPUTE ANGLULAR DISTRIBUTION FROM XZ PROJECTION OF A CONFOCAL STACK
 ///////  WRITTEN BY: SARADHA VENKATACHALAPATHY                                                                                                                   
-///////  ASSUMPTIONS: The input image is a confocal zstack and the channel 1 contains the nucleus. 
+///////  ASSUMPTIONS: The input image is a confocal zstack and the channel 1 contains the nucleus.  Tested on ImageJ v1.52p.
 ///////  DESCRIPTION: The script accepts the directory to a folder containing segmented spheroids folder and the number and names of channels in the raw image that need to be analysed and the target of the stains. 
 ///////				  It creates 1 subfolders: one for storing the features for each channel. It opens each image, obtains zprotection of the XY projection and computes the FFT of the image. Then it computes the 
 ///////				  frequency distribution of the angles in the image. 
