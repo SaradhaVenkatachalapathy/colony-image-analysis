@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////  SCRIPT TO QUANTIFY GEOMETRICAL AND INTENSITY FEATURES
 ///////  WRITTEN BY: SARADHA VENKATACHALAPATHY                                                                                                                   
-///////  ASSUMPTIONS: The input image is a confocal zstack and the channel 1 contains the nucleus. The raw files' extension is ".nd2". Spheroid volumes range from 5,0000-1,000,0000 kcu.microns
+///////  ASSUMPTIONS: The input image is a confocal zstack and the channel 1 contains the nucleus. The raw files' extension is ".nd2". Spheroid volumes range from 5,0000-1,000,0000 kcu.microns. Tested on ImageJ v1.52p.
 ///////  DESCRIPTION: The script accepts the directory to a folder containing rawimages folder and the number of channels in the raw image that need to be analysed and the taget of the stains. 
 ///////				  It creates 3-6 subfolders: one for storing the geoemtrical features of the identified spheroids and others for storing intensity features of the selected image.
 ///////				  For all images in the identifed spheroids, it names and measures the geometrical and intensity features that are requied.
