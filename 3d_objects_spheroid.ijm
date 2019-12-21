@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////  SCRIPT TO IDENTIFY, SEGMENT AND CROP 3D SPHEROIDS USING NUCLEAR STAIN 
 ///////  WRITTEN BY: SARADHA VENKATACHALAPATHY                                                                                                                   
-///////  ASSUMPTIONS: The input image is a confocal zstack and the channel 1 contains the nucleus. The raw files' extension is ".nd2". Spheroid volumes range from 5,0000-1,000,0000 kcu.microns
+///////  ASSUMPTIONS: The input image is a confocal zstack and the channel 1 contains the nucleus. The raw files' extension is ".nd2". Spheroid volumes range from 5,0000-1,000,0000 kcu.microns. Tested on ImageJ v1.52p.
 ///////  DESCRIPTION: The script accepts the directory to a folder containing rawimages folder and the number of channels in the raw image that need to be cropped. 
 ///////				  It creates 5 subfolders: one for storing the image afer 3d segmentation with identified spheroids and 4 for storing channels of the raw image cropped to represent each spheroid.
 ///////				  For all images in the rawimages folder, it smoothens, thresholds, binarizes and fill holes to obtain the binary image of a spheroid. Then identifies 3D objects of size ranging 
