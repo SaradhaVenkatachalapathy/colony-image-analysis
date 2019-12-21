@@ -26,7 +26,7 @@ run("Set Measurements...", "area mean standard modal min centroid center perimet
 
 dir1= dirsa + "sphereoid_DNA"+ File.separator;		// define the path to a new folder that will contain the first channel of the raw image cropped to represent each spheroid
 list1 = getFileList(dir1); // get the list of the files
-
+run("Clear Results");
 for (i=0; i<list1.length; i++) {
 	path = dir1+list1[i]; // set the path 
 	open(path); //open image

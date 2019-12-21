@@ -20,7 +20,7 @@ nchannels=args[1];	// The second argument is the number of channels
 ch2_name=args[2];	// The third argument is the name of the protein in channel 2
 ch3_name=args[3];	// The fourth argument is the name of the protein in channel 3
 ch4_name=args[4];	// The fifth argument is the name of the protein in channel 4
-
+actin_ch=args[5];
 
 setBatchMode(true);	// run in batch mode to save time and memory
 
@@ -50,13 +50,13 @@ filenamesa=getFileList(dirraw);		// get the list of names of the images in the r
 //set the options for 3D objects counter and 3D ROI manager 
 run("3D OC Options", "volume surface nb_of_obj._voxels nb_of_surf._voxels integrated_density mean_gray_value std_dev_gray_value median_gray_value minimum_gray_value maximum_gray_value centroid mean_distance_to_surface std_dev_distance_to_surface median_distance_to_surface centre_of_mass bounding_box dots_size=5 font_size=20 redirect_to=none");
 run("3D Manager Options", "volume surface compactness fit_ellipse 3d_moments integrated_density mean_grey_value std_dev_grey_value mode_grey_value feret minimum_grey_value maximum_grey_value centroid_(pix) centroid_(unit) distance_to_surface centre_of_mass_(pix) centre_of_mass_(unit) bounding_box radial_distance surface_contact closest use distance_between_centers=10 distance_max_contact=1.80");
-
+run("3D Manager");	// Open the 3D ROI manager
 
 for(f=0;f<filenamesa.length;f++){			//loop through all images
 
-	// open the nuclear channel (assummed to be channe1)  
+	// open the actin channel
 	path=dirraw+filenamesa[f]; 	//define the path
-	run("Bio-Formats", "open=path color_mode=Grayscale specify_range view=Hyperstack stack_order=XYCZT c_begin=1 c_end=1 c_step=1");	// open the image
+	run("Bio-Formats", "open=path color_mode=Grayscale specify_range view=Hyperstack stack_order=XYCZT c_begin=actin_ch c_end=actin_ch c_step=1");	// open the image
 
 	// extract the the name of the file or remove file extension
 	imgName=getTitle(); 	//get the title and assign it. it will be a character string
@@ -64,16 +64,29 @@ for(f=0;f<filenamesa.length;f++){			//loop through all images
 	baseName=substring(imgName, 0, baseNameEnd); // get the substring such that the file extention gets removed from the character string 
 
 	//Smoothen, threshold, binarize and fill holes to obtain the binary image of a spheroid
-	run("Gaussian Blur 3D...", "x=10 y=10 z=10"); // perform a 3D gaussian blur to smoothen over any inter-nuclear spaces 
-	setAutoThreshold("Huang dark"); // Threshold the nucleus
+	run("Gaussian Blur 3D...", "x=10 y=10 z=2"); // perform a 3D gaussian blur to smoothen over any inter-nuclear spaces 
+	setAutoThreshold("Huang dark stack"); // Threshold the nucleus
 	run("Make Binary", "method=Default background=Default");	// Binarize the nucleus
-	run("Invert LUT");	// invert the colors
+	run("Invert LUT");//invert LUTs
 	run("Fill Holes", "stack"); //Fill any holes
+	rename("actin");
+	
+	// open the nuclear channel (assummed to be channe1)  
+	run("Bio-Formats", "open=path color_mode=Grayscale specify_range view=Hyperstack stack_order=XYCZT c_begin=1 c_end=1 c_step=1");	// open the image
+	//Smoothen, threshold, binarize and fill holes to obtain the binary image of a spheroid
+	run("Gaussian Blur 3D...", "x=10 y=10 z=2"); // perform a 3D gaussian blur to smoothen over any inter-nuclear spaces 
+	setAutoThreshold("Otsu dark stack"); // Threshold the nucleus
+	run("Make Binary", "method=Default background=Default");	// Binarize the nucleus
+	run("Invert LUT");//invert LUTs
+	run("Fill Holes", "stack"); //Fill any holes
+	rename("nuc");
 
+	imageCalculator("OR create stack", "actin","nuc");
+	run("Fill Holes", "stack");
 	// Identify 3D objects of size ranging from 5,000-1,000,000 cu.microns
 	getVoxelSize(width, height, depth, unit); 	// get the voxel dimentions
-	a=1000000/(width*height*depth);// obtain the number of pixels in a  volume of 1,000,000 cu.microns or  maximum value
-	a_1=5000/(width*height*depth);// obtain the number of pixels in a  volume of 5,000 cu.microns or  minimum value
+	a=1000000000/(width*height*depth);// obtain the number of pixels in a  volume of 1,000,000 cu.microns or  maximum value
+	a_1=3000/(width*height*depth);// obtain the number of pixels in a  volume of 5,000 cu.microns or  minimum value
 	run("3D Objects Counter", "threshold=128 min.=a_1 max.=a objects"); // Identify 3D objects using the 3D objects counter with a Size filter, display objects
 	
 	// Check if there are any 3d objects in the image 
@@ -84,7 +97,7 @@ for(f=0;f<filenamesa.length;f++){			//loop through all images
 		
 		saveAs("Tiff", dirb+baseName+".tiff"); // save the image containing the identified the objects
 		obj_image=getTitle(); // get the image title
-		run("3D Manager");	// Open the 3D ROI manager
+		
 		Ext.Manager3D_AddImage();	// add the segmented image
 		Ext.Manager3D_Count(nb_obj); // get the number of segmented rois
 		run("Close All");	//close all images
@@ -119,7 +132,7 @@ for(f=0;f<filenamesa.length;f++){			//loop through all images
 			img2=getTitle();// get the image title
 			imageCalculator("AND create stack", img1,img2); // select region in the croped raw image that are also in the binary mask of the pth object
 			run("Invert LUT"); // Invert LUT
-			names=baseName[f]+"_spheroid_"+x0+"_"+y0+"_"+z0+"_"+z1; // set the name of the image and spheroid identifier
+			names=baseName+"_spheroid_"+x0+"_"+y0+"_"+z0+"_"+z1; // set the name of the image and spheroid identifier
 			saveAs("tiff",dir+names);	// save the image
 			Ext.Manager3D_CloseResult("M"); 	// close the results window 
 		
@@ -134,7 +147,7 @@ for(f=0;f<filenamesa.length;f++){			//loop through all images
 				img2=getTitle();// get the image title
 				imageCalculator("AND create stack", img1,img2);// select region in the croped raw image that are also in the binary mask of the pth object
 				run("Invert LUT");// Invert LUT
-				names=baseName[f]+"_spheroid_"+x0+"_"+y0+"_"+z0+"_"+z1;// set the name of the image and spheroid identifier
+				names=baseName+"_spheroid_"+x0+"_"+y0+"_"+z0+"_"+z1;// set the name of the image and spheroid identifier
 				saveAs("tiff",dirc2+names);// save the image
 				Ext.Manager3D_CloseResult("M");// close the results window 
 		
@@ -149,7 +162,7 @@ for(f=0;f<filenamesa.length;f++){			//loop through all images
 				img2=getTitle();// get the image title
 				imageCalculator("AND create stack", img1,img2); // select region in the croped raw image that are also in the binary mask of the pth object
 				run("Invert LUT");// Invert LUT
-				names=baseName[f]+"_spheroid_"+x0+"_"+y0+"_"+z0+"_"+z1; // set the name of the image and spheroid identifier
+				names=baseName+"_spheroid_"+x0+"_"+y0+"_"+z0+"_"+z1; // set the name of the image and spheroid identifier
 				saveAs("tiff",dirc3+names); // save the image
 				Ext.Manager3D_CloseResult("M"); // close the results window 
 		
@@ -164,7 +177,7 @@ for(f=0;f<filenamesa.length;f++){			//loop through all images
 				img2=getTitle();// get the image title
 				imageCalculator("AND create stack", img1,img2); // select region in the croped raw image that are also in the binary mask of the pth object
 				run("Invert LUT");// Invert LUT
-				names=baseName[f]+"_spheroid_"+x0+"_"+y0+"_"+z0+"_"+z1; // set the name of the image and spheroid identifier
+				names=baseName+"_spheroid_"+x0+"_"+y0+"_"+z0+"_"+z1; // set the name of the image and spheroid identifier
 				saveAs("tiff",dirc4+names); // save the image
 				Ext.Manager3D_CloseResult("M"); // close the results window 
 		
@@ -178,8 +191,10 @@ for(f=0;f<filenamesa.length;f++){			//loop through all images
 		run("Clear Results"); 	// clear the results table
 	}
 	run("Close All"); // close all open windows
-    Ext.Manager3D_Close(); // close the 3D roi manager
+  //  Ext.Manager3D_Close(); // close the 3D roi manager
+  Ext.Manager3D_Reset();
    	run("Clear Results"); // clear the results table
 }
 
 
+ Ext.Manager3D_Close(); // close the 3D roi manager

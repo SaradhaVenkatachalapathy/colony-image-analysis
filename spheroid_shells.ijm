@@ -19,12 +19,12 @@ ch3_name=args[3];	// The fourth argument is the name of the protein in channel 3
 ch4_name=args[4];	// The fifth argument is the name of the protein in channel 4
 erode_size=5	// set step size to be 5 microns
 
-dirsa= dirsa1 + "3d obj sphereoid"+ File.separator; // define the path to the folder containing the image afer 3d segmentation to indentify spheroids
-filenames1=getFileList(dirsa); // get the list of names of the images in the 3d objects folder
-dir_raw=dirsa1+"rawimages"+File.separator;  // define the path to the folder containing the unprocessed or raw images
+dirsa1= dirsa + "3d obj sphereoid"+ File.separator; // define the path to the folder containing the image afer 3d segmentation to indentify spheroids
+filenames1=getFileList(dirsa1); // get the list of names of the images in the 3d objects folder
+dir_raw=dirsa+"rawimages"+File.separator;  // define the path to the folder containing the unprocessed or raw images
 
 ///creating new subdirectories for storing the processed data//
-dir2=dirsa1+"Shells"+File.separator;  // define the path to a new folder that will contain the following sub-folders for the 3d shells
+dir2=dirsa+"Shells"+File.separator;  // define the path to a new folder that will contain the following sub-folders for the 3d shells
 newDir113 = dir2 + "geometric_measures"+ File.separator;  // define the path to a new folder that will contain the 3d geoemetrical data for the shells
 newDir114= dir2 + "DNA" + File.separator; // define the path to a new folder that will contain the 3d intensity data for the spheroids in channel 1/ DNA channel
 newDir124= dir2 + ch2_name+ File.separator; // define the path to a new folder that will contain the 3d intensity data for the spheroids in channel 2
@@ -48,11 +48,11 @@ setBatchMode(true); // process in batch mode
 run("3D OC Options", "volume surface nb_of_obj._voxels nb_of_surf._voxels centroid std_dev_distance_to_surface bounding_box show_masked_image_(redirection_requiered) dots_size=5 font_size=10 redirect_to=none");
 run("3D Manager Options", "volume surface compactness fit_ellipse 3d_moments integrated_density mean_grey_value std_dev_grey_value mode_grey_value feret minimum_grey_value maximum_grey_value centroid_(pix) centroid_(unit) distance_to_surface centre_of_mass_(pix) centre_of_mass_(unit) bounding_box radial_distance surface_contact closest use distance_between_centers=10 distance_max_contact=1.80");
 run("Set Measurements...", "area mean standard modal min centroid center perimeter bounding fit shape feret's integrated median skewness kurtosis area_fraction limit display redirect=None decimal=3");
-
+run("3D Manager"); // open 3d roi manager
 for(i=0; i<filenames1.length; i++){
 	
 		// open the image containing 3d objects 
-		path3=dirsa+filenames1[i];
+		path3=dirsa1+filenames1[i];
 		open(path3);
 		run("8-bit"); // convert to 8 bit image
 		
@@ -75,15 +75,27 @@ for(i=0; i<filenames1.length; i++){
 		selectWindow(imgName1); // select the 3d objects image
 		setThreshold(1, 4095); // threshold
 		run("Convert to Mask", "method=Default background=Default"); // conver to binary image
-		run("3D Objects Counter", "threshold=1 slice=6 min.=0 max.=1000000000000 statistics objects"); // identify the object again
-		selectWindow(imgName1); // select the image
+		run("Invert LUT");
+		getVoxelSize(width, height, depth, unit); 	// get the voxel dimentions
+		a=1000000000/(width*height*depth);// obtain the number of pixels in a  volume of 1,000,000 cu.microns or  maximum value
+		a_1=40000/(width*height*depth);// obtain the number of pixels in a  volume of 5,000 cu.microns or  minimum value
+		run("3D Objects Counter", "threshold=128 min.=a_1 max.=a objects statistics"); // Identify 3D objects using the 3D objects counter with a Size filter, display objects
+
 		Vol=0;
 		for(l=0;l<nResults;l++){
 			Vol=Vol+getResult("Volume (micron^3)",0); // get the volume of the spheroid
 		}
+		
+	// Check if there are any 3d objects in the image 
+	run("Z Project...", "projection=[Max Intensity]"); 	// project the image containg the objects
+	run("Measure"); // measure
+	close(); // close the projected image
+	if(getResult("Mean",0)>0){    // if there is an object, then the mean intensity will be greater than 0
 
 		//Add the objects to the 3dmanager, in case more than one spheroid exisits, merge and then name the object
-		run("3D Manager"); // open 3d roi manager
+
+		
+		run("3D Manager");
 		Ext.Manager3D_AddImage(); // add the image
 		Ext.Manager3D_Count(nb_obj);  // get the nuumber of rois
 		if(nb_obj>1){ // if more than one object exisit, merge them 
@@ -91,6 +103,9 @@ for(i=0; i<filenames1.length; i++){
 			Ext.Manager3D_Merge();
 
 		}
+		
+		Ext.Manager3D_Bounding3D(0,x0,x1,y0,y1,z0,z1); // for the 0th object, get the cordinates of the bounding rectangle
+		storename=baseName+"_spheroid_"+x0+"_"+y0+"_"+z0+"_"+z1;  // set the name of the object and spheroid identifier
 		Ext.Manager3D_Select(0); //select the object
 		Ext.Manager3D_Rename("spheroid_0"); // rename it nucleus_0
 		
@@ -153,14 +168,14 @@ for(i=0; i<filenames1.length; i++){
 		Ext.Manager3D_DeselectAll();
 		Ext.Manager3D_SelectAll();
     	Ext.Manager3D_Measure();
-		Ext.Manager3D_SaveResult("M",newDir113+filenames1[i]+".tsv");
+		Ext.Manager3D_SaveResult("M",newDir113+storename+".tsv");
 		Ext.Manager3D_CloseResult("M");
 
 		// measuure DNA intensity
 		Ext.Manager3D_DeselectAll();
 		Ext.Manager3D_SelectAll();
 		Ext.Manager3D_Quantif();
-		Ext.Manager3D_SaveQuantif(newDir114+filenames1[i]+".tsv");
+		Ext.Manager3D_SaveQuantif(newDir114+storename+".tsv");
 		Ext.Manager3D_CloseResult("Q");
 		run("Close All");
 
@@ -177,7 +192,7 @@ for(i=0; i<filenames1.length; i++){
 			Ext.Manager3D_DeselectAll();
 			Ext.Manager3D_SelectAll();
 			Ext.Manager3D_Quantif();
-			Ext.Manager3D_SaveQuantif(newDir124+filenames1[i]+".tsv");
+			Ext.Manager3D_SaveQuantif(newDir124+storename+".tsv");
 			Ext.Manager3D_CloseResult("Q");
 			run("Close All");
 		}
@@ -195,7 +210,7 @@ for(i=0; i<filenames1.length; i++){
 			Ext.Manager3D_DeselectAll();
 			Ext.Manager3D_SelectAll();
 			Ext.Manager3D_Quantif();
-			Ext.Manager3D_SaveQuantif(newDir134+filenames1[i]+".tsv");
+			Ext.Manager3D_SaveQuantif(newDir134+storename+".tsv");
 			Ext.Manager3D_CloseResult("Q");
 			run("Close All");
 		}
@@ -213,20 +228,20 @@ for(i=0; i<filenames1.length; i++){
 			Ext.Manager3D_DeselectAll();
 			Ext.Manager3D_SelectAll();
 			Ext.Manager3D_Quantif();
-			Ext.Manager3D_SaveQuantif(newDir144+filenames1[i]+".tsv");
+			Ext.Manager3D_SaveQuantif(newDir144+storename+".tsv");
 			Ext.Manager3D_CloseResult("Q");
 			run("Close All");	
     		
 		}
-
-		Ext.Manager3D_Close();
+	}
+		Ext.Manager3D_Reset();
     	run("Clear Results");
     	run("Collect Garbage");
 		run("Collect Garbage");
 	
 	}
 
-
+Ext.Manager3D_Close();
 
 
 

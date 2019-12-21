@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////  SCRIPT TO INTENSITY OF THE SPHEROIDS ALONG THE Z AXIS
+///////  SCRIPT TO COMPUTE INTENSITY OF THE SPHEROIDS ALONG THE Z AXIS
 ///////  WRITTEN BY: SARADHA VENKATACHALAPATHY                                                                                                                   
 ///////  ASSUMPTIONS: The input image is a confocal zstack and the channel 1 contains the nucleus. 
 ///////  DESCRIPTION: The script accepts the directory to a folder containing segmented spheroids folder and the number of channels in the raw image that need to be analysed and the target of the stains. 
@@ -33,7 +33,7 @@ if(nchannels>2){
 if(nchannels>3){ 
 	File.makeDirectory(Dir_res_ch4_int); 
 }
-
+setBatchMode(true);	// run in batch mode to save time and memory
 dir1= dirsa + "sphereoid_DNA"+ File.separator;		// define the path to a new folder that will contain the first channel of the raw image cropped to represent each spheroid
 list1 = getFileList(dir1); // get the list of the files
 
@@ -44,7 +44,7 @@ for (i=0; i<list1.length; i++) {
 	
 	// extract the the name of the file or remove file extension
 	imgName=getTitle(); 	//get the title and assign it. it will be a character string
-	baseNameEnd=indexOf(imgName, ".nd2"); 	//find the index of the string at with ".nd2" first appears NOTE: this only works for .nd2 files, change this to correct file extension if working with other files 
+	baseNameEnd=indexOf(imgName, ".tif"); 	//find the index of the string at with ".tif" first appears NOTE: this only works for .tif files, change this to correct file extension if working with other files 
 	baseName=substring(imgName, 0, baseNameEnd); // get the substring such that the file extention gets removed from the character string 
 
 	run("Clear Results");	//Clear Results
@@ -68,7 +68,7 @@ for (i=0; i<list1.length; i++) {
 	
 	// extract the the name of the file or remove file extension
 	imgName=getTitle(); 	//get the title and assign it. it will be a character string
-	baseNameEnd=indexOf(imgName, ".nd2"); 	//find the index of the string at with ".nd2" first appears NOTE: this only works for .nd2 files, change this to correct file extension if working with other files 
+	baseNameEnd=indexOf(imgName, ".tif"); 	//find the index of the string at with ".tif" first appears NOTE: this only works for .tif files, change this to correct file extension if working with other files 
 	baseName=substring(imgName, 0, baseNameEnd); // get the substring such that the file extention gets removed from the character string 
 
 	run("Clear Results");	//Clear Results
@@ -92,7 +92,7 @@ if(nchannels>1){
 	
 		// extract the the name of the file or remove file extension
 		imgName=getTitle(); 	//get the title and assign it. it will be a character string
-		baseNameEnd=indexOf(imgName, ".nd2"); 	//find the index of the string at with ".nd2" first appears NOTE: this only works for .nd2 files, change this to correct file extension if working with other files 
+		baseNameEnd=indexOf(imgName, ".tif"); 	//find the index of the string at with ".tif" first appears NOTE: this only works for .tif files, change this to correct file extension if working with other files 
 		baseName=substring(imgName, 0, baseNameEnd); // get the substring such that the file extention gets removed from the character string 
 
 		run("Clear Results");	//Clear Results
@@ -117,7 +117,7 @@ if(nchannels>2){
 	
 		// extract the the name of the file or remove file extension
 		imgName=getTitle(); 	//get the title and assign it. it will be a character string
-		baseNameEnd=indexOf(imgName, ".nd2"); 	//find the index of the string at with ".nd2" first appears NOTE: this only works for .nd2 files, change this to correct file extension if working with other files 
+		baseNameEnd=indexOf(imgName, ".tif"); 	//find the index of the string at with ".nd2" first appears NOTE: this only works for .tif files, change this to correct file extension if working with other files 
 		baseName=substring(imgName, 0, baseNameEnd); // get the substring such that the file extention gets removed from the character string 
 
 		run("Clear Results");	//Clear Results
@@ -142,7 +142,7 @@ if(nchannels>3){
 	
 		// extract the the name of the file or remove file extension
 		imgName=getTitle(); 	//get the title and assign it. it will be a character string
-		baseNameEnd=indexOf(imgName, ".nd2"); 	//find the index of the string at with ".nd2" first appears NOTE: this only works for .nd2 files, change this to correct file extension if working with other files 
+		baseNameEnd=indexOf(imgName, ".tif"); 	//find the index of the string at with ".tif" first appears NOTE: this only works for .tif files, change this to correct file extension if working with other files 
 		baseName=substring(imgName, 0, baseNameEnd); // get the substring such that the file extention gets removed from the character string 
 
 		run("Clear Results");	//Clear Results

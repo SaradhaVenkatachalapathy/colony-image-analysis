@@ -25,7 +25,7 @@ dirsa1=dirsa+"rawimages"+File.separator; // define the path to the folder contai
 dirb= dirsa + "3d obj sphereoid"+ File.separator;  // define the path to the folder containing the image afer 3d segmentation to indentify spheroids
 
 //set the options for 3D ROI manager 
-run("3D Manager Options", "volume surface compactness fit_ellipse 3d_moments integrated_density mean_grey_value std_dev_grey_value mode_grey_value feret minimum_grey_value maximum_grey_value centroid_(pix) centroid_(unit) distance_to_surface centre_of_mass_(pix) centre_of_mass_(unit) bounding_box radial_distance surface_contact closest use distance_between_centers=10 distance_max_contact=1.80");
+run("3D Manager Options", "volume surface compactness fit_ellipse 3d_moments integrated_density mean_grey_value std_dev_grey_value mode_grey_value feret minimum_grey_value maximum_grey_value centroid_(pix) centroid_(unit) distance_to_surface centre_of_mass_(pix) centre_of_mass_(unit) bounding_box radial_distance surface_contact closest use exclude_objects_on_edges_xy distance_between_centers=10 distance_max_contact=1.80");
 
 ///creating new subdirectories for storing the processed data//
 Dir_res_geo_m=dirsa + "3D geometrical data spheroid"+ File.separator;  // define the path to a new folder that will contain the 3d geoemetrical data for the spheroids
@@ -50,31 +50,44 @@ if(nchannels>3){
 
 filenames=getFileList(dirb); // get the list of names of the images in the 3d objects folder
 
-
+run("3D Manager"); // Open the 3D ROI manager
 for(f=0;f<filenames.length;f++){
 	
 	// open the image containing 3d objects 
 	open(dirb+filenames[f]);  //define the path
-
 	// extract the the name of the file or remove file extension
 	obj_image=getTitle(); //get the title and assign it. it will be a character string
 	baseNameEnd=indexOf(obj_image, ".tiff");  //find the index of the string at with ".tiff" first appears NOTE: change this to correct file extension if working with other files 
 	baseName=substring(obj_image, 0, baseNameEnd);  // get the substring such that the file extention gets removed from the character string 
 
-	
-	run("3D Manager"); // Open the 3D ROI manager
 	Ext.Manager3D_AddImage(); // add the segmented image
 	Ext.Manager3D_Count(nb_obj);  // get the number of segmented rois
-	
+
+	name=newArray(nb_obj);//set an array for names
+
 	for(p=0;p<nb_obj;p++){ // loop through all objects
 		Ext.Manager3D_Bounding3D(p,x0,x1,y0,y1,z0,z1); // for the pth object, get the cordinates of the bounding rectangle
 		Ext.Manager3D_MonoSelect(); // select only one object
 		Ext.Manager3D_Select(p);	// select the pth object 
-		name=baseName+"_spheroid_"+x0+"_"+y0+"_"+z0+"_"+z1;  // set the name of the object and spheroid identifier
-		Ext.Manager3D_Rename(name); // rename the object
+		name[p]=baseName+"_spheroid_"+x0+"_"+y0+"_"+z0+"_"+z1;  // set the name of the object and spheroid identifier
 	}
 	Ext.Manager3D_DeselectAll(); // deselct all
+	Ext.Manager3D_Reset();
+	run("Close All");
+		
+	// open the image containing 3d objects 
+	open(dirb+filenames[f]);  //define the path
+		run("Bin...", "x=4 y=4 z=1 bin=Average");
+	
+	Ext.Manager3D_AddImage(); // add the segmented image
+	Ext.Manager3D_Count(nb_obj);  // get the number of segmented rois
 
+	for(p=0;p<nb_obj;p++){ // loop through all objects
+		Ext.Manager3D_MonoSelect(); // select only one object
+		Ext.Manager3D_Select(p);	// select the pth object 
+		Ext.Manager3D_Rename(name[p]); // rename the object
+	}
+	Ext.Manager3D_DeselectAll(); // deselct all
 	
 	Ext.Manager3D_SelectAll(); // select all objects
 	Ext.Manager3D_Measure();   // measure geoemtric data
@@ -85,6 +98,7 @@ for(f=0;f<filenames.length;f++){
 	name=baseName+".nd2"; // set the name with the proper extension
 	path=dirsa1+name;	// set path
 	run("Bio-Formats", "open=path color_mode=Grayscale specify_range view=Hyperstack stack_order=XYCZT c_begin=1 c_end=1 c_step=1"); // open the first channel 
+	run("Bin...", "x=4 y=4 z=1 bin=Average");
 	Ext.Manager3D_Quantif(); // measure intensity 
 	Ext.Manager3D_SaveQuantif(Dir_res_ch1_int+baseName+".tsv"); // save the results
 	Ext.Manager3D_CloseResult("Q"); // close the results window
@@ -92,6 +106,7 @@ for(f=0;f<filenames.length;f++){
 
 	if(nchannels>1){ // if channel 2 is needed
 		run("Bio-Formats", "open=path color_mode=Grayscale specify_range view=Hyperstack stack_order=XYCZT c_begin=2 c_end=2 c_step=1"); // open the second channel 
+		run("Bin...", "x=4 y=4 z=1 bin=Average");
 		Ext.Manager3D_Quantif(); // measure intensity 
 		Ext.Manager3D_SaveQuantif(Dir_res_ch2_int+baseName+".tsv"); // save the results
 		Ext.Manager3D_CloseResult("Q"); // close the results window
@@ -100,22 +115,27 @@ for(f=0;f<filenames.length;f++){
 
 	if(nchannels>2){ // if channel 3 is needed
 		run("Bio-Formats", "open=path color_mode=Grayscale specify_range view=Hyperstack stack_order=XYCZT c_begin=3 c_end=3 c_step=1"); // open the third channel 
+		run("Bin...", "x=4 y=4 z=1 bin=Average");
 		Ext.Manager3D_Quantif(); // measure intensity 
 		Ext.Manager3D_SaveQuantif(Dir_res_ch3_int+baseName+".tsv"); // save the results
 		Ext.Manager3D_CloseResult("Q"); // close the results window
 		run("Close All"); // close all open images
 	}
 	
-	if(nchannels>3){ // if channel 2 is needed
+	if(nchannels>3){ // if channel 4 is needed
 		run("Bio-Formats", "open=path color_mode=Grayscale specify_range view=Hyperstack stack_order=XYCZT c_begin=4 c_end=4 c_step=1"); // open the fourth channel 
+		run("Bin...", "x=4 y=4 z=1 bin=Average");
 		Ext.Manager3D_Quantif(); // measure intensity 
 		Ext.Manager3D_SaveQuantif(Dir_res_ch4_int+baseName+".tsv"); // save the results
 		Ext.Manager3D_CloseResult("Q"); // close the results window
 		run("Close All"); // close all open images
 	}
 	
+	Ext.Manager3D_Reset();
 	
-	Ext.Manager3D_Close(); // close the 3D roi manager
+	run("Collect Garbage"); // collect garbage
+	run("Collect Garbage"); // collect garbage
 	run("Collect Garbage"); // collect garbage
 
 }
+Ext.Manager3D_Close(); // close the 3D roi manager

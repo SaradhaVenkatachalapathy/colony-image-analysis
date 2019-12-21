@@ -59,7 +59,7 @@ if(nchannels>1){
 
 	for (i=0; i<filename.length; i++) { 
      	 path=dir+filename[i]; // set path 
-	  	run("Bio-Formats", "open=path color_mode=Grayscale specify_range view=Hyperstack stack_order=XYCZT c_begin=1 c_end=1 c_step=1"); // open image
+	  	run("Bio-Formats", "open=path color_mode=Grayscale specify_range view=Hyperstack stack_order=XYCZT c_begin=2 c_end=2 c_step=1"); // open image
 
       	// extract the the name of the file or remove file extension
 	  	imgName=getTitle(); 	//get the title and assign it. it will be a character string
@@ -85,7 +85,7 @@ if(nchannels>2){
 
 	for (i=0; i<filename.length; i++) { 
      	 path=dir+filename[i]; // set path 
-	  	run("Bio-Formats", "open=path color_mode=Grayscale specify_range view=Hyperstack stack_order=XYCZT c_begin=1 c_end=1 c_step=1"); // open image
+	  	run("Bio-Formats", "open=path color_mode=Grayscale specify_range view=Hyperstack stack_order=XYCZT c_begin=3 c_end=3 c_step=1"); // open image
 
       	// extract the the name of the file or remove file extension
 	  	imgName=getTitle(); 	//get the title and assign it. it will be a character string
@@ -112,7 +112,7 @@ if(nchannels>3){
 
 	for (i=0; i<filename.length; i++) { 
      	 path=dir+filename[i]; // set path 
-	  	run("Bio-Formats", "open=path color_mode=Grayscale specify_range view=Hyperstack stack_order=XYCZT c_begin=1 c_end=1 c_step=1"); // open image
+	  	run("Bio-Formats", "open=path color_mode=Grayscale specify_range view=Hyperstack stack_order=XYCZT c_begin=4 c_end=4 c_step=1"); // open image
 
       	// extract the the name of the file or remove file extension
 	  	imgName=getTitle(); 	//get the title and assign it. it will be a character string
