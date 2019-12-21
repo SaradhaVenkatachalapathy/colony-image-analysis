@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////  SCRIPT WITH A FUNCTION TO RUN ALL THE SPHEREOID ANALYSIS PROGRAMS       											                   				   	
 ///////  WRITTEN BY: SARADHA VENKATACHALAPATHY                                                                                                                     
-///////  ASSUMPTIONS: All the macros are saved in one folder
+///////  ASSUMPTIONS: All the macros are saved in one folder. Tested on ImageJ v1.52p.
 ///////  DESCRIPTION: This script contains a function which accepts the path to the macro folder, the experimental folder, samples, channel information, cytoplasm channel,
 ///////					number of channels to be processed and the seperating character
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
