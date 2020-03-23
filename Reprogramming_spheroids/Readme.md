@@ -13,11 +13,13 @@ For visualization of 3D spheroids, it is important to have 3D projections of the
   2. The program _"spheroid_zproject_raw.ijm"_ projects the images along the Z axis and makes a montage for each channel. 
   
 In order to then identify spheroids as 3D objects,we use _"3d_objects_spheroid.ijm"_. Here, the sheroids are identified using only the cytoskletal or nuclear channel as defined by the user. After this step, a number of further analysis can be done. We have doen the following<br/>
-<img src='/Reprogramming_spheroids/protein_measurements.png' height='500' width='900'><br/>
-
+<p align="center">
+<img src='/Reprogramming_spheroids/protein_measurements.png' height='400' width='800'><br/>
+</p>
 In addtion, we have used the 2D FFT of the XZ projection image to compute the angles of filamentous structures. 
+<p align="center">
 <img src='/Reprogramming_spheroids/angles_fft_xz.png' height='400' width='400'><br/>
-
+</p>
 
 Below are the programs that achieve the above. 
 
