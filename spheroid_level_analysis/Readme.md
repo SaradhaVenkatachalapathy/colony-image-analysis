@@ -1,24 +1,24 @@
 # Reprogramming Spheroid Analysis
-These are programs writen to visualize and quantatively characterize spheroids of cells as one unit. 
+These are programs written to visualize and quantitatively characterize spheroids of cells as one unit. 
 
 Below is a typical image of a 3D spheroid of cells.<br/>
 <p align="center">
-<img src='/Reprogramming_spheroids/spheroid_level_analysis/spheroid_image.png' height='200' width='150'><br/>
+<img src='/spheroid_level_analysis/spheroid_image.png' height='200' width='150'><br/>
 </p>
 
 The first program to run is the _"move_files_rawimages.ijm"_. It moves all files in the input folder to a new folder it creates in the input directory called raw images.
 
-For visualization of 3D spheroids, it is important to have 3D projections of the images to see the z profile along with a montage of zprojected images for visualizing the variability among the images aquired. Towards this end 2 programs are used. 
+For visualization of 3D spheroids, it is important to have 3D projections of the images to see the z profile along with a montage of z-projected images for visualizing the variability among the images acquired. Towards this end 2 programs are used. 
   1. The program _"project_in3d.ijm"_ perfroms a 3D projection of all the images. 
   2. The program _"spheroid_zproject_raw.ijm"_ projects the images along the Z axis and makes a montage for each channel. 
   
-In order to then identify spheroids as 3D objects,we use _"3d_objects_spheroid.ijm"_. Here, the sheroids are identified using only the cytoskletal or nuclear channel as defined by the user. After this step, a number of further analysis can be done. We have doen the following<br/>
+In order to then identify spheroids as 3D objects,we use _"3d_objects_spheroid.ijm"_. Here, the spheroids are identified using only the cytoskeletal or nuclear channel as defined by the user. After this step, a number of further analysis can be done. We have doen the following<br/>
 <p align="center">
-<img src='/Reprogramming_spheroids/spheroid_level_analysis/protein_measurements.png' height='400' width='800'><br/>
+<img src='/spheroid_level_analysis/protein_measurements.png' height='400' width='800'><br/>
 </p>
-In addtion, we have used the 2D FFT of the XZ projection image to compute the angles of filamentous structures. 
+In addition, we have used the 2D FFT of the XZ projection image to compute the angles of filamentous structures. 
 <p align="center">
-<img src='/Reprogramming_spheroids/spheroid_level_analysis/angles_fft_xz.png' height='400' width='400'><br/>
+<img src='/spheroid_level_analysis/angles_fft_xz.png' height='400' width='400'><br/>
 </p>
 
 Below are the programs that achieve the above. 
