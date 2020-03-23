@@ -3,7 +3,7 @@ These are programs written to visualize and quantitatively characterize spheroid
 
 Below is a typical image of a 3D spheroid of cells.<br/>
 <p align="center">
-<img src='/spheroid_level_analysis/spheroid_image.png' height='200' width='150'><br/>
+<img src='/spheroid_level_image_analysis/spheroid_image.png' height='200' width='150'><br/>
 </p>
 
 The first program to run is the _"move_files_rawimages.ijm"_. It moves all files in the input folder to a new folder it creates in the input directory called raw images.
@@ -14,11 +14,11 @@ For visualization of 3D spheroids, it is important to have 3D projections of the
   
 In order to then identify spheroids as 3D objects,we use _"3d_objects_spheroid.ijm"_. Here, the spheroids are identified using only the cytoskeletal or nuclear channel as defined by the user. After this step, a number of further analysis can be done. We have doen the following<br/>
 <p align="center">
-<img src='/spheroid_level_analysis/protein_measurements.png' height='400' width='800'><br/>
+<img src='/spheroid_level_image_analysis/protein_measurements.png' height='400' width='800'><br/>
 </p>
 In addition, we have used the 2D FFT of the XZ projection image to compute the angles of filamentous structures. 
 <p align="center">
-<img src='/spheroid_level_analysis/angles_fft_xz.png' height='400' width='400'><br/>
+<img src='/spheroid_level_image_analysis/angles_fft_xz.png' height='400' width='400'><br/>
 </p>
 
 Below are the programs that achieve the above. 
