@@ -14,7 +14,7 @@ In order to then identify spheroids as 3D objects,we use _"3d_objects_spheroid.i
 <img src='/Reprogramming_spheroids/protein_measurements.png' height='500' width='900'><br/>
 
 In addtion, we have used the 2D FFT of the XZ projection image to compute the angles of filamentous structures. 
-<img src='/Reprogramming_spheroids/angles_fft_xz.png' height='500' width='900'><br/>
+<img src='/Reprogramming_spheroids/angles_fft_xz.png' height='500' width='800'><br/>
 
 
 Below are the programs that achieve the above. 
