@@ -7,7 +7,7 @@ In order to then identify nuclei as 3D objects, we use _"binarize_the_nucleus.ij
 
 Below is a depiction of a typical nuclear segmentation of a 3D spheroid of cells.<br/>
 <p align="center">
-<img src='/nuclear_level_analysis/Sepgmentation.png' height='200' width='150'><br/>
+<img src='/nuclear_level_analysis/Sepgmentation.png' height='200' width='500'><br/>
 </p>
 
 
