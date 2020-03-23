@@ -13,7 +13,7 @@ Below is a depiction of a typical nuclear segmentation of a 3D spheroid of cells
 
 After this step, a number of further analysis can be done. We have done the following<br/>
 <p align="center">
-<img src='/nuclear_level__image_analysis/Features.png' height='400' width='800'><br/>
+<img src='/nuclear_level_image_analysis/Features.png' height='400' width='800'><br/>
 </p>
 
 Below are the programs that achieve the above. 
