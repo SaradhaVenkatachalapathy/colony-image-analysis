@@ -43,7 +43,7 @@ function run_spheroid_analysis(path_to_spheroid_analysis_macros_folder,path_to_e
 // set the arguments
 samples=newArray("data", "dat1"); 		//samples
 sep=" ";								//separating charcter
-channel_data="4 OCT4 LAMINAC ACTIN";	//channel information
+channel_data="4 prot1 prot2 prot3";	//channel information
 cytoplasm_channel="4";					//cytoplasm channel
 nch=4;									// number of channels to be analysed
 
