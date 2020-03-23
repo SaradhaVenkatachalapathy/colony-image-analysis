@@ -2,7 +2,9 @@
 These are programs writen to visualize and quantatively characterize spheroids of cells as one unit. 
 
 Below is a typical image of a 3D spheroid of cells.<br/>
-<img src='/Reprogramming_spheroids/spheroid_image.png' height='400' width='300'><br/>
+<p align="center">
+<img src='/Reprogramming_spheroids/spheroid_image.png' height='200' width='150'><br/>
+</p>
 
 The first program to run is the _"move_files_rawimages.ijm"_. It moves all files in the input folder to a new folder it creates in the input directory called raw images.
 
