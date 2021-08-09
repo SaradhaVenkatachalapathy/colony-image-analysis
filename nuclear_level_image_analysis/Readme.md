@@ -1,4 +1,4 @@
-# Reprogramming Spheroid Nuclear level Analysis
+# Spheroid Nuclear level Analysis
 These are programs written to visualize and quantitatively characterize nuclei of cells within a spheroid. 
 
 The first program to run is the _"move_files_rawimages.ijm"_. It moves all files in the input folder to a new folder it creates in the input directory called raw images. 
