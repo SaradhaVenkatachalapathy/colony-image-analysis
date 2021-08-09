@@ -1,4 +1,4 @@
-# Reprogramming Spheroid Analysis
+# Spheroid Analysis
 These are programs written to visualize and quantitatively characterize spheroids of cells as one unit. 
 
 Below is a typical image of a 3D spheroid of cells.<br/>
